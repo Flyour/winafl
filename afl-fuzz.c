@@ -2638,15 +2638,16 @@ static u8 run_target(char** argv, u32 timeout) {
     }
   }
 
-  if (dll_init_ptr) {
-    if (!dll_init_ptr())
-      PFATAL("User-defined custom initialization routine returned 0");
-  }
 
   if(!is_child_running()) {
     destroy_target_process(0);
     create_target_process(argv);
     fuzz_iterations_current = 0;
+  }
+
+  if (dll_init_ptr) {
+    if (!dll_init_ptr())
+      PFATAL("User-defined custom initialization routine returned 0");
   }
 
   if (dll_run_ptr)
